@@ -14,5 +14,5 @@ spec:
     - hard
     - nfsvers=4.1
   nfs:
-    path: /tmp/optimal/es
+    path: /mnt/optimal/es
     server: 10.0.1.51

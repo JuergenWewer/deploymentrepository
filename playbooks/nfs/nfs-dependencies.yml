@@ -14,27 +14,27 @@
   tasks:
    - name: create directories to be mounted
      file:
-       path: /tmp/optimal/es
+       path: /mnt/optimal/es
        state: directory
        mode: 0777
    - name: create directories to be mounted
      file:
-       path: /tmp/optimal/gg
+       path: /mnt/optimal/gg
        state: directory
        mode: 0777
    - name: create directories to be mounted
      file:
-       path: /tmp/optimal/mi
+       path: /mnt/optimal/mi
        state: directory
        mode: 0777
    - name: create directories to be mounted
      file:
-       path: /tmp/optimal/mq
+       path: /mnt/optimal/mq
        state: directory
        mode: 0777
    - name: create directories to be mounted
      file:
-       path: /tmp/optimal/pg
+       path: /mnt/optimal/pg
        state: directory
        mode: 0777
    - name: install nfs server
