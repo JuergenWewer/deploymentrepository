@@ -1,0 +1,57 @@
+- hosts: workers
+  become: yes
+  tasks:
+   - name: install nfs clients
+     apt:
+       name: "{{ item }}"
+       state: present
+     with_items:
+       - nfs-common
+
+
+- hosts: master
+  become: yes
+  tasks:
+   - name: create directories to be mounted
+     file:
+       path: /tmp/optimal/es
+       state: directory
+       mode: 0777
+   - name: create directories to be mounted
+     file:
+       path: /tmp/optimal/gg
+       state: directory
+       mode: 0777
+   - name: create directories to be mounted
+     file:
+       path: /tmp/optimal/mi
+       state: directory
+       mode: 0777
+   - name: create directories to be mounted
+     file:
+       path: /tmp/optimal/mq
+       state: directory
+       mode: 0777
+   - name: create directories to be mounted
+     file:
+       path: /tmp/optimal/pg
+       state: directory
+       mode: 0777
+   - name: install nfs server
+     apt:
+       name: nfs-kernel-server
+       state: present
+       force: yes
+   - name: remove /etc/exports
+     ansible.builtin.file:
+       path: etc/exports
+       state: absent
+   - name: set /etc/exports to allow access to remote directories
+     copy:
+       src: exports
+       dest: /etc/exports
+       remote_src: no
+       owner: root
+   - name: restart nfs server
+     shell: systemctl restart nfs-kernel-server
+

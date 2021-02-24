@@ -22,23 +22,23 @@ yuuvis:
     app: yuuvis
   db:
     user: yuuvis
-    password: optimal
+    password: optimalsystem
   keycloak:
     user: keycloak
-    password: optimal
+    password: optimalsystem
     db:
       user: keycloak
-      password: optimal
+      password: optimalsystem
     nodePort: 30111
     realm:
       yuuvistest:
         user:
           name: root
-          password: optimal
+          password: optimalsystem
       testyuuvis:
         user:
           name: root
-          password: optimal
+          password: optimalsystem
     
 elasticsearch:
   image: docker.yuuvis.org/yuuvis/elasticsearch:2019-11-28
@@ -59,7 +59,7 @@ elasticsearch:
 postgresql:
   enabled: true
   fullnameOverride: postgresql
-  postgresqlPassword: optimal
+  postgresqlPassword: optimalsystem
   persistence:
     storageClass: standard
     size: 500Mi
@@ -80,7 +80,7 @@ rabbitmq:
   fullnameOverride: rabbitmq
   auth:
     username: rodger
-    password: optimal
+    password: optimalsystem
   extraPlugins: "rabbitmq_auth_backend_ldap rabbitmq_amqp1_0 rabbitmq_prometheus"
   extraConfiguration: |-
     #default_vhost = {{ .Release.Namespace }}-vhost
@@ -104,13 +104,13 @@ gogs:
     storageClass: standard
   git:
     user: yuuvis
-    password: optimal
+    password: optimalsystem
     
 minio:
   enabled: true
   fullnameOverride: minio
   accessKey: "MGMWCOYTDUSLNCFE"
-  secretKey: "optimal"
+  secretKey: "optimalsystem"
   persistence:
     storageClass: standard
     size: 10Gi

@@ -18,13 +18,22 @@ limitations under the License.
 
 ## Prerequisites
 
+we use version: v3.5.0
 Please use helm version [v3.2.4](https://github.com/helm/helm/releases/tag/v3.2.4), newer versions may not be compatible with some of the helm charts.
+
+
+## install persistent volumes in kubernetess
+
+
+ansible-playbook -i hosts ./playbooks/nfs/nfs-dependencies.yml
+
+ansible-playbook -i hosts ./playbooks/pvs.yml
 
 ## yuuvis installation
 
 First please add your credentials for the docker.yuuvis.org registry in the values yaml files of the helm charts.  For any questions about credentials please contact support@yuuvis.com.
 
-Replace all **changeme** default passwords in the values.yaml of the charts you plan to use.   
+Replace all **changeme** default passwords in the values.yaml of the charts you plan to use.   !! minimum length 8 Character (minio)
 
 ### Add required Helm repositorys:
 
@@ -36,6 +45,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 #### Update infrastructure dependencies
 
+old:
 ```shell
 cd infrastructure
 helm dep up
@@ -45,7 +55,14 @@ cd ..
 https://kubernetes-charts.storage.googleapis.com/ is no longer available
 instead:
 helm repo rm stable
+
+```shell
+cd infrastructure
+helm dep up
 helm repo add stable https://charts.helm.sh/stable
+cd ..
+```
+
 #### Edit the infrastructure values.yaml
 
 * Edit the docker registry credentials. 
