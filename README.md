@@ -24,6 +24,18 @@ Please use helm version [v3.2.4](https://github.com/helm/helm/releases/tag/v3.2.
 
 ## install persistent volumes in kubernetess
 
+check disks:
+
+on master:
+lsblk
+-> sdb1
+
+list all mounted filesystems:
+sudo mount -t ext4
+
+to mount a disk on /dev/sdb1 on the directory /mnt/optimal
+sudo mkdir -p /mnt/optimal
+sudo mount -t ext4 /dev/sdb1 /mnt/optimal
 
 ansible-playbook -i hosts ./playbooks/nfs/nfs-dependencies.yml -v --extra-vars "ansible_sudo_pass=OSVHyuuvis2021!"
 
@@ -52,6 +64,8 @@ helm dep up
 helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 cd ..
 ```
+
+new:
 https://kubernetes-charts.storage.googleapis.com/ is no longer available
 instead:
 helm repo rm stable
