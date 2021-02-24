@@ -25,9 +25,9 @@ Please use helm version [v3.2.4](https://github.com/helm/helm/releases/tag/v3.2.
 ## install persistent volumes in kubernetess
 
 
-ansible-playbook -i hosts ./playbooks/nfs/nfs-dependencies.yml
+ansible-playbook -i hosts ./playbooks/nfs/nfs-dependencies.yml -v --extra-vars "ansible_sudo_pass=OSVHyuuvis2021!"
 
-ansible-playbook -i hosts ./playbooks/pvs.yml
+ansible-playbook -i hosts ./playbooks/pvs.yml -v --extra-vars "ansible_sudo_pass=OSVHyuuvis2021!"
 
 ## yuuvis installation
 

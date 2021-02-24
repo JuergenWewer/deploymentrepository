@@ -15,4 +15,4 @@ spec:
     - nfsvers=4.1
   nfs:
     path: /tmp/optimal/mq
-    server: 10.211.55.4
+    server: 10.0.1.51
