@@ -71,6 +71,8 @@ cd ..
 
 #### Install infrastructure services
 
+export KUBECONFIG=/Users/wewer/.kube/config/master/etc/kubernetes/admin.conf
+
 ```shell
 kubectl create namespace infrastructure
 helm install infrastructure ./infrastructure --namespace infrastructure
@@ -94,6 +96,11 @@ keycloak-create-selfsigned-cert   1/1           8m4s       8m4s
 
 * Edit the docker registry credentials.
 
+check port of keycloak:
+look for service:
+keycloak-https ....NodePort....443/30111/TCP
+
+check keycloak endpoint: https://<master-ip>:30111
 
 ### Install the yuuvis Helm chart
 
