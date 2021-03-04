@@ -1,0 +1,20 @@
+- name: install pv-es
+  shell: kubectl apply -f ./playbooks/persistentvolumes/pv-es.yml
+  args:
+    chdir: "{{ installdir }}"
+- name: install pv-gg
+  shell: kubectl apply -f ./playbooks/persistentvolumes/pv-gg.yml
+  args:
+    chdir: "{{ installdir }}"
+- name: install pv-mi
+  shell: kubectl apply -f ./playbooks/persistentvolumes/pv-mi.yml
+  args:
+    chdir: "{{ installdir }}"
+- name: install pv-mq
+  shell: kubectl apply -f ./playbooks/persistentvolumes/pv-mq.yml
+  args:
+    chdir: "{{ installdir }}"
+- name: install pv-pg
+  shell: kubectl apply -f ./playbooks/persistentvolumes/pv-pg.yml
+  args:
+    chdir: "{{ installdir }}"
