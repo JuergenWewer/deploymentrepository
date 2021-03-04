@@ -15,11 +15,11 @@ yuuvis:
     url: gogs.infrastructure/yuuvis/yuuvis-config.git
     name: yuuvis-config
     user: yuuvis
-    password: optimal
+    password: optimalsystem
     branch: master
   amqp:
     user: rodger
-    password: optimal
+    password: optimalsystem
     url: rabbitmq.infrastructure
     port: 5672
   livenessProbe:
@@ -58,13 +58,13 @@ yuuvis:
         name: erebus
         user: postgres
         port: "5432"
-        password: optimal
+        password: optimalsystem
         address: postgresql.infrastructure
         createdb: true
       userseriveyml: |
         keycloak.server: http://keycloak-http.infrastructure/auth
         keycloak.admin.username: keycloak
-        keycloak.admin.password: optimal
+        keycloak.admin.password: optimalsystem
     client:
       dockerImage: docker.yuuvis.org/yuuvis/client:1.2.9
       instances: 1
