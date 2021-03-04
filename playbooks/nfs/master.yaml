@@ -1,0 +1,75 @@
+- name: create directories to be mounted
+  file:
+    path: '{{ item }}'
+    state: directory
+    mode: 0777
+  with_lines: cat "{{ mountdirs }}"
+#- name: create directories to be mounted
+#  file:
+#    path: '{{ item.dest }}'
+#    state: directory
+#    mode: 0777
+#  loop:
+#    - { dest: /tmp/optimal/es }
+#    - { dest: /tmp/optimal/gg }
+#    - { dest: /tmp/optimal/mi }
+#    - { dest: /tmp/optimal/mq }
+#    - { dest: /tmp/optimal/pg }
+
+#- name: create directories to be mounted
+#  file:
+#    path: /tmp/optimal/es
+#    state: directory
+#    mode: 0777
+#- name: create directories to be mounted
+#  file:
+#    path: /tmp/optimal/gg
+#    state: directory
+#    mode: 0777
+#- name: create directories to be mounted
+#  file:
+#    path: /tmp/optimal/mi
+#    state: directory
+#    mode: 0777
+#- name: create directories to be mounted
+#  file:
+#    path: /tmp/optimal/mq
+#    state: directory
+#    mode: 0777
+#- name: create directories to be mounted
+#  file:
+#    path: /tmp/optimal/pg
+#    state: directory
+#    mode: 0777
+
+- name: install nfs server
+  apt:
+    name: nfs-kernel-server
+    state: present
+    force: yes
+- name: stop nfs
+  shell: systemctl stop nfs-kernel-server
+- name: copy nfs-kernel-server to set nfs versions
+  copy:
+    src: nfs-kernel-server
+    dest: /etc/default/nfs-kernel-server
+    remote_src: no
+    owner: root
+- name: set rpcbind service
+  shell: systemctl mask rpcbind.service
+- name: set rpcbind socket
+  shell: systemctl mask rpcbind.socket
+- name: start nfs
+  shell: systemctl start nfs-kernel-server
+- name: remove /etc/exports
+  ansible.builtin.file:
+    path: etc/exports
+    state: absent
+- name: set /etc/exports to allow access to remote directories
+  copy:
+    src: "{{ exports }}"
+    dest: /etc/exports
+    remote_src: no
+    owner: root
+- name: restart nfs server
+  shell: systemctl restart nfs-kernel-server

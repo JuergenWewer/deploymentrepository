@@ -1,17 +1,20 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-gg
+  name: pv-es
+  labels:
+    app: pvcs
 spec:
   capacity:
-    storage: 100Mi
+    storage: 5Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
+  storageClassName: standard
   mountOptions:
     - hard
     - nfsvers=4.1
   nfs:
-    path: /tmp/optimal/gg
+    path: /tmp/optimal/es
     server: 10.211.55.4
