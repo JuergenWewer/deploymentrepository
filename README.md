@@ -199,5 +199,33 @@ kubectl delete jobs keycloak-create-selfsigned-cert -n infrastructure
 kubectl delete job gogsrepo-init -n infrastructure
 kubectl delete pvc gogs -n infrastructure
 kubectl delete pv name(replace with pv from gogs --check value with kubectl get pv -n infrastructure) -n infrastructure
+
+kubectl delete pv -l app=pvcs 
 ```
 While deleting persistence volume and persistence claim from gogs, please delete pod, than they will be unbind.
+
+
+Install nginx-ingress
+
+[comment]: <> (kubectl create namespace nginx-ingress)
+
+[comment]: <> (helm repo add nginx-stable https://helm.nginx.com/stable)
+
+[comment]: <> (helm repo update)
+
+[comment]: <> (helm install nginx-ingress ingress-nginx --namespace nginx-ingress)
+
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+
+helm install ingress-nginx ingress-nginx/ingress-nginx
+
+use kubernetes helm repos in ansible
+ansible-galaxy collection install community.kubernetes
+
+in playbooks use:
+community.kubernetes.helm_repository
+
+cd playbooks
+ansible-playbook -i macpro start.yml -v
+ansible-playbook -i macpro delete.yml -v

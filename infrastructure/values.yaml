@@ -16,7 +16,7 @@ yuuvis:
     # we assume test deployment in minikube
     # ip is the ip of the vm minikube creates
     # to get the ip: minikube ip
-    ip: 192.168.99.100
+    ip: 10.211.55.4
     port: 30080
   labels:
     app: yuuvis
@@ -90,17 +90,18 @@ rabbitmq:
   persistence:
     enabled: true
     storageClass: standard
-    size: 100Mi
+    size: 1Gi
 
 gogs:
   useCustomDeployment: true
+  useOldDeployment: false
   image: gogs/gogs:0.11.91
   imagePullPolicy: IfNotPresent
   initcontainer:
     image: docker.yuuvis.org/yuuvis/helper/init-helper:latest
     secret: dockeryuuvisorg
   persistence:
-    size: 100Mi
+    size: 500Mi
     storageClass: standard
   git:
     user: yuuvis

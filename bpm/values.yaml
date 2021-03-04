@@ -9,7 +9,7 @@ yuuvis:
     url: gogs.infrastructure/yuuvis/yuuvis-config.git
     name: yuuvis-config
     user: yuuvis
-    password: changeme
+    password: optimalsystem
     branch: master
   livenessProbe:
     enable: false
@@ -33,7 +33,7 @@ yuuvis:
         name: themis
         user: postgres
         port: "5432"
-        password: changeme
+        password: optimalsystem
         address: postgresql.infrastructure
         createdb: true
         
