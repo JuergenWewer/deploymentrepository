@@ -4,7 +4,7 @@
     state: directory
     mode: 0777
   with_lines: cat "{{ mountdirs }}"
-#- name: create directories to be mounted
+# - name: create directories to be mounted
 #  file:
 #    path: '{{ item.dest }}'
 #    state: directory
@@ -16,27 +16,27 @@
 #    - { dest: /tmp/optimal/mq }
 #    - { dest: /tmp/optimal/pg }
 
-#- name: create directories to be mounted
+# - name: create directories to be mounted
 #  file:
 #    path: /tmp/optimal/es
 #    state: directory
 #    mode: 0777
-#- name: create directories to be mounted
+# - name: create directories to be mounted
 #  file:
 #    path: /tmp/optimal/gg
 #    state: directory
 #    mode: 0777
-#- name: create directories to be mounted
+# - name: create directories to be mounted
 #  file:
 #    path: /tmp/optimal/mi
 #    state: directory
 #    mode: 0777
-#- name: create directories to be mounted
+# - name: create directories to be mounted
 #  file:
 #    path: /tmp/optimal/mq
 #    state: directory
 #    mode: 0777
-#- name: create directories to be mounted
+# - name: create directories to be mounted
 #  file:
 #    path: /tmp/optimal/pg
 #    state: directory
