@@ -11,7 +11,10 @@
 - hosts: localhost
   tasks:
     - name: create persistent volumes
-      include_tasks: "{{ pvs }}"
+      shell: kubectl apply -f '{{ item }}'
+      args:
+        chdir: "{{ installdir }}"
+      with_lines: cat "{{ persistentvolumeslist }}"
     - name: create infrastructure and waiting suppression ending
       community.kubernetes.helm:
         name: infrastructure
