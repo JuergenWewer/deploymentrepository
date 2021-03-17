@@ -1,4 +1,4 @@
-installdir: /home/jwewer/yuuvis
+installdir: /home/jwewer/workspace/yuuvis
 exports: exports-optimal
 mountdirs: ./nfs/mountdirs-optimal
 persistentvolumeslist: ./persistentvolumes/optimal/list
