@@ -8,3 +8,5 @@
 /mnt/optimal/mq       11.12.0.0/255.255.0.0(rw,sync,no_root_squash)
 /mnt/optimal/pg       10.0.0.0/255.0.0.0(rw,sync,no_root_squash)
 /mnt/optimal/pg       11.12.0.0/255.255.0.0(rw,sync,no_root_squash)
+/mnt/optimal/nexus       10.0.0.0/255.0.0.0(rw,sync,no_root_squash)
+/mnt/optimal/nexus       11.12.0.0/255.255.0.0(rw,sync,no_root_squash)
