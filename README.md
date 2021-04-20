@@ -219,20 +219,6 @@ kubectl delete pv -l app=pvcs
 While deleting persistence volume and persistence claim from gogs, please delete pod, than they will be unbind.
 
 
-Install nginx-ingress
-
-[comment]: <> (kubectl create namespace nginx-ingress)
-
-[comment]: <> (helm repo add nginx-stable https://helm.nginx.com/stable)
-
-[comment]: <> (helm repo update)
-
-[comment]: <> (helm install nginx-ingress ingress-nginx --namespace nginx-ingress)
-
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
-
-helm install ingress-nginx ingress-nginx/ingress-nginx
 
 use kubernetes helm repos in ansible
 ansible-galaxy collection install community.kubernetes
@@ -240,6 +226,203 @@ ansible-galaxy collection install community.kubernetes
 in playbooks use:
 community.kubernetes.helm_repository
 
+####################################################
+install yuuvis
+####################################################
+
 cd playbooks
 ansible-playbook -i macpro start.yml -v
 ansible-playbook -i macpro delete.yml -v
+
+ansible-playbook -i optimal start.yml -v
+
+######################################################
+keycloak konfigurieren:
+######################################################
+https://<master-ip>:30111
+keycloak
+optimalsystem
+
+Master:
+master-realm-export-macpro importieren dabei die Skip Option auswählen
+im Login Bereich SSL - none auswählen
+user anlegen:
+jwewer
+admin123
+admin Rolle zuweisen
+
+Yuuvistest:
+user anlegen:
+jwewer
+admin123
+
+-> einloggen funktioniert: 10.21.55.4:30080 -> yuuvistest jwewer:admin123
+
+Yuuvistest:
+
+folgende Rollen jwewer zuweisen:
+YUUVIS_DEFAULT
+YUUVIS_SYSTEM_INTEGRATOR
+YUUVIS_TENANT_ADMIN
+YUUVIS_MANAGE_SETTINGS
+YUUVIS_CREATE_OBJECT
+
+import realm-export.json mit Skip
+
+client: account
+
+Root URL: ${authBaseUrl}
+Valid Redirect URIs: /realms/yuuvistest/account/*
+Base URL: /realms/yuuvistest/account
+
+
+yuuvis-authentication-service:
+
+Root URL: http://10.211.55.4:30080/
+Valid Redirect URIs:
+http://10.211.55.10:30080/*
+http://10.211.55.9:30080/*
+http://10.211.55.4:30080/*
+
+Admin URL: http://10.211.55.4:30080/
+Web Origins: http://10.211.55.4:30080
+
+
+
+client: account
+
+Root URL: ${authBaseUrl}
+Valid Redirect URIs: /realms/master/account/*
+Base URL: /realms/master/account/
+
+neuen client anlegen: account-console
+
+Name: ${client_account-console}
+Root URL: ${authBaseUrl}
+Valid Redirect URIs: /realms/master/account/*
+Base URL: /realms/master/account/
+
+security-admin-console:
+
+Name: ${client_security-admin-console}
+Root URL: ${authAdminUrl}
+Valid Redirect URIs: /admin/master/console/*
+Base URL: /admin/master/console/
+
+
+Im Yuuvistest Tenant:
+
+client: account
+
+Root URL: ${authBaseUrl}
+Valid Redirect URIs: /realms/yuuvistest/account/*
+Base URL: /realms/yuuvistest/account
+
+neuen client anlegen: account-console
+
+Name: ${client_account-console}
+Root URL: ${authBaseUrl}
+Valid Redirect URIs: /realms/yuuvistest/account/*
+Base URL: /realms/yuuvistest/account/
+Admin URL: ${authBaseUrl}
+
+security-admin-console:
+
+Name: ${client_security-admin-console}
+Root URL: ${authAdminUrl}
+Valid Redirect URIs: /admin/yuuvistest/console/*
+Base URL: /admin/yuuvistest/console/
+
+
+yuuvis-authentication-service:
+
+Root URL: http://10.211.55.4:30080/
+Valid Redirect URIs:
+http://10.211.55.10:30080/*
+http://10.211.55.9:30080/*
+http://10.211.55.4:30080/*
+
+Admin URL: http://10.211.55.4:30080/
+Web Origins: http://10.211.55.4:30080
+
+User anlegen - yuuvisttest und master tenent:
+
+jwewer
+
+password hinzufügen: admin123
+temporary off
+
+Role Mapping:
+offline_access
+uma_authorization
+YUUVIS_DEFAULT
+YUUVIS_SYSTEM_INTEGRATOR
+YUUVIS_TENANT_ADMIN
+
+admin rolle im master tenant
+
+YUUVIS_MANAGE_SETTINGS rolle im yuuvistest tenant anlegen und zuordnen
+
+dann einloggen:
+
+http://10.211.55.4:30080
+Mandant: yuuvistes
+user: jwewer/admin123
+
+###########################################################
+swagger ui zugreifen:
+#####################################################
+api-web
+kubectl port-forward api-web-6d85dd8f75-jh7n5 7550:7550 --namespace=yuuvis
+http://localhost:7550/swagger-ui.html
+#####################################################
+
+neue rolle anlegen und hinzufügen:
+YUUVIS_CREATE_OBJECT
+
+admin oberfläche - check ob alle services oben sind
+kubectl port-forward admin-55f7c7fd7-dl72j 7273:7273 --namespace=yuuvis
+localhost:7273
+
+gogs:
+kubectl port-forward gogs-7fdb548486-wlp6s 3000:3000 --namespace=infrastructure
+localhost:3000
+login mit yuuvis
+
+kubectl get pods/userservice-6bb6d648b5-j8qqv --namespace=yuuvis -o yaml | grep "serviceAccount" 
+
+Anzahl Felder auf 100 erhöhen:
+
+im gogs:
+yuuvis-config
+http://localhost:3000/yuuvis/yuuvis-config/src/master/system-prod.yml
+die folgende Zeile hinzufügen:
+schema.tenant.properties.limit: 100
+
+restart:
+configservice
+admin
+api
+api-web
+
+
+Deutsche Feldnamen:
+im gogs:
+http://localhost:3000/yuuvis/yuuvis-config/src/master/apps/api-web/text/i18n_de.json
+inhalt von 188n_de.json einfügen
+
+#################################################################
+#       log level und Neustart
+#################################################################
+
+in dem deployments (geht bei allen), in den JAVA_OPTS folgenden Parameter hinzufügen:
+
+-Dlogging.level.root=TRACE
+
+Neustart bei authentification Fehlern:
+
+authentication deployment editieren und log level ändern
+
+################################################################
+
+
