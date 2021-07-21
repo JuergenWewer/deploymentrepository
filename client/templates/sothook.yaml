@@ -54,4 +54,4 @@ spec:
         - containerPort: 10779
       restartPolicy: Always
       imagePullSecrets:
-      - name: clientsecret
+      - name: {{.Values.yuuvis.image.imagePullSecret }}

@@ -5,6 +5,7 @@ metadata:
   labels:
     app: client
 spec:
+  backoffLimit: 3
   template:
     spec:
       containers:
@@ -19,7 +20,7 @@ spec:
           name: initscript
           subPath: clientgitinit.bash
       imagePullSecrets:
-      - name:  clientsecret
+      - name:  {{.Values.yuuvis.image.imagePullSecret }}
       volumes:
       - configMap:
           name: clientresources

@@ -30,8 +30,8 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
-Create clientsecret pull secret.
+Create dockeryuuvisorg pull secret.
 */}}
 {{- define "imagePullSecret" }}
-{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.imageCredentials.clientsecret.registry (printf "%s:%s" .Values.imageCredentials.clientsecret.username .Values.imageCredentials.clientsecret.password | b64enc) | b64enc }}
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.imageCredentials.dockeryuuvisorg.registry (printf "%s:%s" .Values.imageCredentials.dockeryuuvisorg.username .Values.imageCredentials.dockeryuuvisorg.password | b64enc) | b64enc }}
 {{- end }}

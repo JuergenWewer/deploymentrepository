@@ -41,7 +41,7 @@ yuuvis:
           password: optimalsystem
     
 elasticsearch:
-  image: docker.yuuvis.org/yuuvis/elasticsearch:2019-11-28
+  image: docker.yuuvis.org/yuuvis/elasticsearch:2021-02-09
   imagePullPolicy: IfNotPresent
   imagePullSecret: dockeryuuvisorg
   storage: 5Gi
@@ -94,14 +94,13 @@ rabbitmq:
 
 gogs:
   useCustomDeployment: true
-  useOldDeployment: false
   image: gogs/gogs:0.11.91
   imagePullPolicy: IfNotPresent
   initcontainer:
     image: docker.yuuvis.org/yuuvis/helper/init-helper:latest
     secret: dockeryuuvisorg
   persistence:
-    size: 500Mi
+    size: 100Mi
     storageClass: standard
   git:
     user: yuuvis
@@ -127,6 +126,8 @@ minio:
 keycloak:
   enabled: true
   fullnameOverride: "keycloak"
+  image.repository: docker.yuuvis.org/yuuvis/keycloak
+  image.tag: 11.0.2-stable1
   livenessProbe: |
     httpGet:
       path: /auth/
