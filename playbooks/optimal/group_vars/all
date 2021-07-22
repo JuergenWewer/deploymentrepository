@@ -5,3 +5,6 @@ persistentvolumeslist: ./persistentvolumes/optimal/list
 pvs: persistentvolumes/pvs-optimal.yml
 ansible_sudo_pass: OSVHyuuvis2021!
 pvsdir: /home/jwewer/workspace/yuuvis/playbooks/persistentvolumes/optimal
+hostIP: 10.0.1.51
+keycloakAddress: 10.0.1.51:30111
+

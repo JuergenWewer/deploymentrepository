@@ -9,6 +9,7 @@ yuuvis:
     # !!! Change before running
     # this variable must contain the "public" ip of keycloak
     # this ip will be sent to the user from the authentication service
+#    address: 10.211.55.4:30111
     address: 10.211.55.4:30111
   git:
     protocol: http

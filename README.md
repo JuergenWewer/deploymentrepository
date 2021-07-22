@@ -236,9 +236,20 @@ cd playbooks
 ansible-playbook -i macpro start.yml -v
 ansible-playbook -i macpro delete.yml -v
 
+delete infrastructure and yuuvis pods:
+ansible-playbook -i macpro deleteyuuvis.yml -v
+
+
 if delete not works:
 kubectl delete pods --all -n infrastructure --force
 kubectl delete pods --all -n yuuvis --force
+
+if helm blocks:
+helm history yuuvis -n yuuvis
+helm delete yuuvis 1 -n yuuvis
+
+! vorher gg verzeichnis auf root:root zurücksetzen:
+sudo chown root:root /mnt/optimal/gg
 ansible-playbook -i optimal start.yml -v
 
 ######################################################

@@ -23,6 +23,10 @@
         chart_ref: $HOME/workspace/yuuvis/infrastructure
         create_namespace: true
         wait: true
+        values:
+          yuuvis:
+            authentication:
+              ip: "{{ hostIP }}"
     - name: create yuuvis and waiting suppression ending
       community.kubernetes.helm:
         name: yuuvis
@@ -31,6 +35,16 @@
         create_namespace: true
         wait_timeout: "10m"
         wait: true
+        values:
+          yuuvis:
+            keycloak:
+              # !!! Change before running
+              # this variable must contain the "public" ip of keycloak
+              # this ip will be sent to the user from the authentication service
+              #    address: 10.211.55.4:30111
+              address: "{{ keycloakAddress }}"
+#        values_files:
+#          - /custom-values.yaml
     - name: create client and waiting suppression ending
       community.kubernetes.helm:
         name: client
