@@ -33,7 +33,7 @@
         release_namespace: yuuvis
         chart_ref: $HOME/workspace/yuuvis/yuuvis
         create_namespace: true
-        wait_timeout: "10m"
+        wait_timeout: "15m"
         wait: true
         values:
           yuuvis:
