@@ -101,7 +101,7 @@ gogs:
     secret: dockeryuuvisorg
   persistence:
     size: 100Mi
-    storageClass: standard
+    storageClassName: standard
   git:
     user: yuuvis
     password: optimalsystem

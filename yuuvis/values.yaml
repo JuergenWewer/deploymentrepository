@@ -40,7 +40,10 @@ yuuvis:
     port: 6379
   authconfig: |
     routing.defaultEntryPoint: '/client/index.html'
-
+    
+    management.server.port: {{.Values.yuuvis.services.authentication.managePort}}
+    management.server.servlet.context-path: /
+    
     management:
       endpoints:
         web:
@@ -50,12 +53,15 @@ yuuvis:
             - health
             - info
             - refresh
+            - prometheus
       endpoint:
         refresh:
           enabled: true
         info:
           enabled: true
         health:
+          enabled: true
+        prometheus:
           enabled: true
     routing.endpoints:
       - 'authentication'
@@ -68,12 +74,12 @@ yuuvis:
       - 'architect'
       - 'custom'
       - 'userservice'
+      - 'bpm-engine'
 
     authorization.accesses:
     ### manage-endpoints
-      - endpoints: /manage/info,/manage/health
+      - endpoints: /manage/**
         expose: true
-      - endpoints: /manage/refresh
       - endpoints: /*/manage/**
         access: hasAuthority('YUUVIS_SYSTEM_INTEGRATOR')
     ### API-endpoints
@@ -114,6 +120,11 @@ yuuvis:
         access: hasAuthority('YUUVIS_TENANT_ADMIN')
     ### userservice
       - endpoints: /userservice/**
+    ### bpm-engine
+      - endpoints: /bpm-engine/internal/**
+        access: denyAll
+      - endpoints: /bpm-engine/**
+
   storage: |
     storage:
       repositories:
@@ -249,7 +260,6 @@ yuuvis:
   systemProd: |
     spring.cloud.kubernetes.discovery.filter: metadata!=null && metadata.labels!=null && metadata.labels['yuuvis']=="true"
     schema.changed.observers: /rest-ws/refreshschema?global=%s, /sothook/schema/refresh?global=%s, /primarysothook/schema/refresh?global=%s
-    schema.tenant.properties.limit: 100
   serviceConfiguration: |
     {"services": {
        "contentanalyzer": {
@@ -283,13 +293,12 @@ yuuvis:
     periodSeconds: 30
     timeoutSeconds: 5
     path: /manage/health
-  # create services with type nodport for authentication, admin
   labels:
     app: yuuvis
   services:
     api:
       dockerRegistry: docker.yuuvis.org/yuuvis/api-gateway
-      tag: 4.7.4
+      tag: 4.8.0-RC09
       profiles: prod,redis,docker,kubernetes,metrics
       instances: 1
       java:
@@ -302,18 +311,17 @@ yuuvis:
         memory: "512Mi"
     admin:
       dockerRegistry: docker.yuuvis.org/yuuvis/admin
-      tag: 5.7.2.1
+      tag: 5.7.2.0
       profiles: prod,docker,kubernetes
       instances: 1
       port: 7273
-      nodePort: 30273
       java:
         maxHeap: -Xmx128m -XX:+ExitOnOutOfMemoryError
       requests:
         memory: "128Mi"
     audit:
       dockerRegistry: docker.yuuvis.org/yuuvis/audit
-      tag: 4.7.4
+      tag: 4.8.0-RC09
       profiles: prod,jpapostgres,dbs,docker,kubernetes,metrics
       instances: 1
       port: 7251
@@ -322,14 +330,16 @@ yuuvis:
       requests:
         memory: "512Mi"
     authentication:
+      # create services with type nodport for authentication
       nodeport:
         use: true
         value: 30080
       dockerRegistry: docker.yuuvis.org/yuuvis/authentication
-      tag: 4.7.4
+      tag: 4.8.0-RC09
       profiles: prod,oauth2,docker,kubernetes,metrics
       instances: 1
       port: 8080
+      # for the manage endpoints a dedicated port is used
       managePort: 9091
       requests:
         memory: "512Mi"
@@ -345,7 +355,7 @@ yuuvis:
           name: keycloak-tls-selfsigned
     config:
       dockerRegistry: docker.yuuvis.org/yuuvis/config
-      tag: 5.7.2.1
+      tag: 4.8.0-RC09
       instances: 1
       port: 7282
       java:
@@ -354,7 +364,7 @@ yuuvis:
         memory: "256Mi"
     contentanalyzer:
       dockerRegistry: docker.yuuvis.org/yuuvis/contentanalyzer
-      tag: 4.7.4
+      tag: 4.8.0-RC09
       profiles: prod,docker,kubernetes,metrics
       instances: 2
       port: 7430
@@ -365,7 +375,7 @@ yuuvis:
     index:
       dockerRegistry: docker.yuuvis.org/yuuvis/index
       profiles: prod,es,docker,kubernetes,redis,metrics
-      tag: 4.7.4
+      tag: 4.8.0-RC09
       instances: 1
       port: 7291
       dependencyCheck:
@@ -377,7 +387,7 @@ yuuvis:
         memory: "1024Mi"
     organization:
       dockerRegistry: docker.yuuvis.org/yuuvis/organization
-      tag: 4.7.4
+      tag: 4.8.0-RC09
       profiles: prod,oauth2,keycloak,docker,kubernetes,metrics
       instances: 1
       port: 7440
@@ -395,7 +405,7 @@ yuuvis:
           name: keycloak-tls-selfsigned
     registry:
       dockerRegistry: docker.yuuvis.org/yuuvis/registry
-      tag: 4.7.4
+      tag: 4.8.0-RC09
       profiles: prod,docker,jpapostgres,dbs,redis,kubernetes,metrics
       instances: 1
       port: 7510
@@ -405,12 +415,12 @@ yuuvis:
         memory: "1024Mi"
     repository:
       dockerRegistry: docker.yuuvis.org/yuuvis/repository
-      tag: 4.7.4
+      tag: 4.8.0-RC09
       profiles: prod,storage,docker,kubernetes,redis,metrics
       instances: 1
       port: 7500
       dependencyCheck:
-        enable: false
+        enable: true
         url: http://minio.infrastructure.svc.cluster.local:9000
       java:
         maxHeap: -Xmx1024m -XX:+ExitOnOutOfMemoryError
@@ -418,7 +428,7 @@ yuuvis:
         memory: "1024Mi"
     search:
       dockerRegistry: docker.yuuvis.org/yuuvis/search
-      tag: 4.7.4
+      tag: 4.8.0-RC09
       profiles: prod,es,docker,kubernetes,metrics
       instances: 1
       port: 7221
@@ -432,7 +442,7 @@ yuuvis:
     system:
       dockerRegistry: docker.yuuvis.org/yuuvis/system
       profiles: prod,docker,redis,kubernetes,metrics
-      tag: 4.7.4
+      tag: 4.8.0-RC09
       instances: 1
       port: 7400
       java:
