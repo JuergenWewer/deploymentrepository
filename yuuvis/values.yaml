@@ -260,6 +260,7 @@ yuuvis:
   systemProd: |
     spring.cloud.kubernetes.discovery.filter: metadata!=null && metadata.labels!=null && metadata.labels['yuuvis']=="true"
     schema.changed.observers: /rest-ws/refreshschema?global=%s, /sothook/schema/refresh?global=%s, /primarysothook/schema/refresh?global=%s
+    schema.tenant.properties.limit: 100
   serviceConfiguration: |
     {"services": {
        "contentanalyzer": {
