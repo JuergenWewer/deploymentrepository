@@ -10,3 +10,5 @@
 /tmp/optimal/pg       11.12.0.0/255.255.0.0(rw,sync,no_root_squash)
 /tmp/optimal/nexus       10.0.0.0/255.0.0.0(rw,sync,no_root_squash)
 /tmp/optimal/nexus       11.12.0.0/255.255.0.0(rw,sync,no_root_squash)
+/tmp/optimal/nfs-provisioner       10.0.0.0/255.0.0.0(rw,sync,no_root_squash)
+/tmp/optimal/nfs-provisioner       11.12.0.0/255.255.0.0(rw,sync,no_root_squash)

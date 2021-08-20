@@ -6,3 +6,5 @@ pvs: persistentvolumes/pvs-macpro.yml
 pvsdir: ./playbooks/persistentvolumes/macpro
 hostIP: 10.211.55.4
 keycloakAddress: 10.211.55.4:30111
+nfsserver: 10.211.55.4
+nfsprovisionerpath: /tmp/optimal/nfs-provisioner

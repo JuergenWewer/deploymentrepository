@@ -1,5 +1,4 @@
 - hosts: master
-- hosts: master
   tasks:
     - name: Include task nfs dependencies
       import_tasks: ./nfs/master.yaml
@@ -16,6 +15,17 @@
       args:
         chdir: "{{ installdir }}"
       with_lines: cat "{{ persistentvolumeslist }}"
+    - name: create nfs provisioner
+      community.kubernetes.helm:
+        name: nfsprovisioner
+        release_namespace: default
+        chart_ref: $HOME/workspace/yuuvis/nfs-provisioner
+        wait: true
+        values:
+          nfsProvisioner:
+            nfsServer:
+              ip: "{{ nfsserver }}"
+              path: "{{ nfsprovisionerpath }}"
     - name: create infrastructure and waiting suppression ending
       community.kubernetes.helm:
         name: infrastructure
