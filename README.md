@@ -243,7 +243,10 @@ ansible-playbook -i macpro update.yml -v
 
 delete infrastructure and yuuvis pods:
 ansible-playbook -i macpro deleteyuuvis.yml -v
+
+for optimal:
 ansible-playbook -i optimal deleteyuuvis.yml -v
+ansible-playbook -i optimal update.yml -v
 
 for azure:
 ansible-playbook -i azure deleteyuuvis.yml -v
