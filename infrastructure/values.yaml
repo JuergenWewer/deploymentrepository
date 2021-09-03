@@ -114,14 +114,13 @@ minio:
   persistence:
     storageClass: standard
     size: 10Gi
+    enabled: false
   resources: {}
   # for gateway usage with azure blob storage set access  key and secret key to your
   # storage account credentials, activate azure gateway mode and disable persistence
-  # persistence:
-  #   enabled: false
-  # azuregateway:
-  #   enabled: true
-  #   replicas: 1 
+  azuregateway:
+    enabled: false
+    replicas: 1
 
 keycloak:
   enabled: true

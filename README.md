@@ -233,11 +233,21 @@ community.kubernetes.helm_repository
 ####################################################
 
 cd playbooks
-ansible-playbook -i macpro start.yml -v
+
+ansible-playbook -i macpro storage.yml -v
+ansible-playbook -i macpro update.yml -v
+
+
 ansible-playbook -i macpro delete.yml -v
+ansible-playbook -i macpro update.yml -v
 
 delete infrastructure and yuuvis pods:
 ansible-playbook -i macpro deleteyuuvis.yml -v
+ansible-playbook -i optimal deleteyuuvis.yml -v
+
+for azure:
+ansible-playbook -i azure deleteyuuvis.yml -v
+ansible-playbook -i azure update.yml -v
 
 
 if delete not works:

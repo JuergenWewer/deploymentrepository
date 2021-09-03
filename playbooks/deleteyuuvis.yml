@@ -1,4 +1,3 @@
-
 - hosts: localhost
   vars:
     application: true
@@ -7,6 +6,7 @@
     community.kubernetes.helm:
       name: management
       release_namespace: yuuvis
+      kubeconfig_path: "{{ kubeconfig }}"
       state: absent
       wait: true
     when: application
@@ -14,6 +14,7 @@
     community.kubernetes.helm:
       name: rendition
       release_namespace: yuuvis
+      kubeconfig_path: "{{ kubeconfig }}"
       state: absent
       wait: true
     when: application
@@ -21,6 +22,7 @@
     community.kubernetes.helm:
       name: bpm
       release_namespace: yuuvis
+      kubeconfig_path: "{{ kubeconfig }}"
       state: absent
       wait: true
     when: application
@@ -28,6 +30,7 @@
     community.kubernetes.helm:
       name: client
       release_namespace: yuuvis
+      kubeconfig_path: "{{ kubeconfig }}"
       state: absent
       wait: true
     when: application
@@ -35,6 +38,7 @@
     community.kubernetes.helm:
       name: yuuvis
       release_namespace: yuuvis
+      kubeconfig_path: "{{ kubeconfig }}"
       state: absent
       wait: true
     when: application
@@ -42,6 +46,7 @@
     community.kubernetes.helm:
       name: infrastructure
       release_namespace: infrastructure
+      kubeconfig_path: "{{ kubeconfig }}"
       state: absent
       wait: true
     when: application

@@ -14,6 +14,7 @@ yuuvis:
   git:
     protocol: http
     url: gogs.infrastructure/yuuvis/yuuvis-config.git
+    server: gogs.infrastructure
     name: yuuvis-config
     user: yuuvis
     password: optimalsystem
@@ -138,8 +139,8 @@ yuuvis:
       profiles:
         s3:
           s3profile1:
-            access-key: 'MGMWCOYTDUSLNCFE'
-            secret-key: 'optimalsystem'
+            access-key: MGMWCOYTDUSLNCFE
+            secret-key: optimalsystem
             url: 'http://minio.infrastructure:9000'
             bucket: 'dmscloudrepodocker'
         netapp:

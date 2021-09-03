@@ -68,8 +68,8 @@ yuuvis:
             host: postgresql.infrastructure
             port: "5432"
             name: consoledb
-            user: changeme
-            password: changeme
+            user: yuuvis
+            password: optimalsystem
             createdb: true
             # for postgres systems the database an optional init job can be used to create 
             # the database
@@ -80,8 +80,8 @@ yuuvis:
             # the privilege user must have the rights to create databases, users
             # and grand privileges to users
             privilege:
-              user: postgres
-              password: changeme
+              user: yuuvis
+              password: optimalsystem
           smtp:
             host: changeme
             port: "25"
