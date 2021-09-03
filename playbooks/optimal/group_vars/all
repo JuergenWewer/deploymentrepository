@@ -6,6 +6,7 @@ pvs: persistentvolumes/pvs-optimal.yml
 ansible_sudo_pass: OSVHyuuvis2021!
 pvsdir: /home/jwewer/workspace/yuuvis/playbooks/persistentvolumes/optimal
 hostIP: 10.0.1.51
+hostPort: 30080
 nfs-server: 10.0.1.51
 nfs-provisioner-path: /mnt/optimal/nfs-provisioner
 kubeconfig: /etc/kubernetes/admin.conf
