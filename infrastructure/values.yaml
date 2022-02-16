@@ -16,7 +16,7 @@ yuuvis:
     # we assume test deployment in minikube
     # ip is the ip of the vm minikube creates
     # to get the ip: minikube ip
-    ip: 10.211.55.4
+    ip: 192.168.178.77
     port: 30080
   labels:
     app: yuuvis
@@ -45,7 +45,7 @@ elasticsearch:
   imagePullPolicy: IfNotPresent
   imagePullSecret: dockeryuuvisorg
   storage: 5Gi
-  storageClassName: standard
+  storageClassName: managed-nfs-raid-storage
   javaOpts: -Xms1024m -Xmx1024m
   replicas: 1
   port: 9300
@@ -61,7 +61,7 @@ postgresql:
   fullnameOverride: postgresql
   postgresqlPassword: optimalsystem
   persistence:
-    storageClass: standard
+    storageClass: managed-nfs-raid-storage
     size: 500Mi
   resources:
     requests:
@@ -89,7 +89,7 @@ rabbitmq:
     amqp1_0.default_user = rodger
   persistence:
     enabled: true
-    storageClass: standard
+    storageClass: managed-nfs-raid-storage
     size: 1Gi
 
 gogs:
@@ -101,7 +101,7 @@ gogs:
     secret: dockeryuuvisorg
   persistence:
     size: 100Mi
-    storageClassName: standard
+    storageClassName: managed-nfs-raid-storage
   git:
     user: yuuvis
     password: optimalsystem
@@ -112,7 +112,7 @@ minio:
   accessKey: "MGMWCOYTDUSLNCFE"
   secretKey: "optimalsystem"
   persistence:
-    storageClass: standard
+    storageClass: managed-nfs-raid-storage
     size: 10Gi
     enabled: false
   resources: {}
@@ -194,5 +194,5 @@ redis:
       initialDelaySeconds: 600
     persistence:
       enabled: false
-      storageClass: standard
+      storageClass: managed-nfs-raid-storage
       size: 50Mi

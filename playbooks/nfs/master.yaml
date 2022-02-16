@@ -29,9 +29,9 @@
 - name: set rpcbind socket
   become: true
   shell: systemctl mask rpcbind.socket
-- name: start nfs
+- name: stop nfs
   become: true
-  shell: systemctl start nfs-kernel-server
+  shell: systemctl stop nfs-kernel-server
 - name: remove /etc/exports
   become: true
   ansible.builtin.file:

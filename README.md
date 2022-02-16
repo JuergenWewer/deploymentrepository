@@ -85,7 +85,7 @@ cd ..
 
 #### Install infrastructure services
 
-export KUBECONFIG=/Users/wewer/.kube/config/master/etc/kubernetes/admin.conf
+export KUBECONFIG=/Users/wewer/.kube/master/etc/kubernetes/admin.conf
 
 ```shell
 kubectl create namespace infrastructure
@@ -234,18 +234,32 @@ community.kubernetes.helm_repository
 
 cd playbooks
 
+################## install with predefinied persistent volumes ############################
+
 ansible-playbook -i macpro storage.yml -v
 ansible-playbook -i macpro update.yml -v
 
 
 ansible-playbook -i macpro delete.yml -v
+
+# if the volumes have to be recreated use start if existing volumes should be use use update
+ansible-playbook -i macpro start.yml -v
 ansible-playbook -i macpro update.yml -v
 
-delete infrastructure and yuuvis pods:
+# if dynamic storage provisioning (nfs or blob) should be used
+helm install azure-storage azure-storage --set node.enableBlobfuseProxy=false --namespace kube-system
+ansible-playbook -i macpro updateForCsiRaidProvisioner.yml -v
+
+uninstall:
 ansible-playbook -i macpro deleteyuuvis.yml -v
+helm uninstall azure-storage --namespace kube-system
+
+for blob storage class:
+edit the all file in macpro and fill inthe blob class
 
 for optimal:
 ansible-playbook -i optimal deleteyuuvis.yml -v
+ansible-playbook -i optimal start.yml -v
 ansible-playbook -i optimal update.yml -v
 
 for azure:
@@ -275,6 +289,11 @@ optimalsystem
 Master:
 im Login Bereich SSL - none auswählen
 
+yuuvis login
+http://10.211.55.4:30080/
+root
+optimalsystem
+
 -> Postman request funktionieren:
 
 ######################################################
@@ -302,11 +321,17 @@ dann den Pod userservice löschen.
 manchmal ist es auch der authentication service (Fehler im log zu sehen: cannot find user ...) man bekommt einen unauthorized zurück,
 dann gleiches wie mit user-service machen
 
+##########################################################
+minio speicher 
+##########################################################
+kubectl port-forward minio-6b946fcf7c-w6rrb 9000:9000 --namespace=infrastructure
+http://localhost:9000
+und dann die minio secrets
 ###########################################################
 swagger ui zugreifen:
 #####################################################
 api-web
-kubectl port-forward api-web-6d85dd8f75-hqhn5 7550:7550 --namespace=yuuvis
+kubectl port-forward api-web-57b6fdcf59-4fsxd 7550:7550 --namespace=yuuvis
 http://localhost:7550/swagger-ui.html
 
 kubectl port-forward api-6c7f7cc76c-qs9mb 7550:7550 --namespace=yuuvis
@@ -323,7 +348,7 @@ kubectl port-forward admin-55f7c7fd7-dl72j 7273:7273 --namespace=yuuvis
 localhost:7273
 
 gogs:
-kubectl port-forward gogs-8557fb4f77-nm829 3000:3000 --namespace=infrastructure
+kubectl port-forward gogs-7fdb548486-jmbx8 3000:3000 --namespace=infrastructure
 localhost:3000
 login mit yuuvis
 
@@ -372,3 +397,19 @@ in dem deployments (geht bei allen), in den JAVA_OPTS folgenden Parameter hinzuf
     "maxItems": 50
     }
 }
+
+
+####################  csi-raid ##############################
+
+helm install csi-raid csi-raid
+helm uninstall csi-raid
+
+
+to test the provisioner:
+
+kubectl create -f csi-raid/test/test-csi-claim.yaml
+kubectl create -f csi-raid/test/test-csi-pod.yaml
+
+it should create the SUCCESS-CSI file in the provisioned volume.
+
+| grep managed-nfs-raid-storage

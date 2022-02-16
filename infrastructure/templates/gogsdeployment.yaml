@@ -38,6 +38,7 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: gogs
+#          claimName: task-pvc-volume
 ---
 apiVersion: v1
 kind: Service

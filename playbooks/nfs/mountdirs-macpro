@@ -1,7 +1,7 @@
-/tmp/optimal/es
-/tmp/optimal/gg
-/tmp/optimal/mi
-/tmp/optimal/mq
-/tmp/optimal/pg
-/tmp/optimal/nexus
-/tmp/optimal/nfs-provisioner
+/mnt/optimal/es
+/mnt/optimal/gg
+/mnt/optimal/mi
+/mnt/optimal/mq
+/mnt/optimal/pg
+/mnt/optimal/nexus
+/mnt/optimal/nfs-csi-provisioner

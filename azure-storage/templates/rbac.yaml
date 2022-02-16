@@ -3,7 +3,7 @@ kind: ServiceAccount
 metadata:
   name: csi-raid
   # replace with namespace where provisioner is deployed
-  namespace: yuuvis
+  namespace: kube-system
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -12,6 +12,9 @@ metadata:
 rules:
   - apiGroups: [""]
     resources: ["nodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods"]
     verbs: ["get", "list", "watch"]
   - apiGroups: [""]
     resources: ["persistentvolumes"]
@@ -34,7 +37,7 @@ subjects:
   - kind: ServiceAccount
     name: csi-raid
     # replace with namespace where provisioner is deployed
-    namespace: yuuvis
+    namespace: kube-system
 roleRef:
   kind: ClusterRole
   name: csi-raid-runner
@@ -45,7 +48,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: leader-locking-csi-raid
   # replace with namespace where provisioner is deployed
-  namespace: yuuvis
+  namespace: kube-system
 rules:
   - apiGroups: [""]
     resources: ["endpoints"]
@@ -56,12 +59,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: leader-locking-csi-raid
   # replace with namespace where provisioner is deployed
-  namespace: yuuvis
+  namespace: kube-system
 subjects:
   - kind: ServiceAccount
     name: csi-raid
     # replace with namespace where provisioner is deployed
-    namespace: yuuvis
+    namespace: kube-system
 roleRef:
   kind: Role
   name: leader-locking-csi-raid

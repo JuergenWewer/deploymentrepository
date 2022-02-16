@@ -32,6 +32,16 @@
         persistence:
           storageClass: "{{ postgresqlpersistencestorageClass }}"
           size: "{{ postgresqlpersistencesize }}"
+        volumePermissions:
+          securityContext:
+            runAsUser: "auto"
+        securityContext:
+            enabled: false
+        containerSecurityContext:
+            enabled: false
+        shmVolume:
+            chmod:
+              enabled: false
       rabbitmq:
         auth:
           password: "{{ rabbitmqauthpassword }}"
