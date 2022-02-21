@@ -1,3 +1,4 @@
+{{- if not .Values.elasticsearch.highAvailability.enabled}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -34,6 +35,12 @@ spec:
         args:
         - elasticsearch
         - -E
+        - node.master=true
+        - -E
+        - node.data=true
+        - -E
+        - node.ingest=false
+        - -E
         - discovery.seed_hosts=elasticsearch
         - -E
         - cluster.initial_master_nodes={{.Values.elasticsearch.initial_master_nodes}}
@@ -46,7 +53,7 @@ spec:
           protocol: TCP
         env:
         - name: "ES_JAVA_OPTS"
-          value: {{.Values.elasticsearch.javaOpts}}
+          value: {{.Values.elasticsearch.memory}}
         volumeMounts:
         - name: es-data
           mountPath: /usr/share/elasticsearch/data
@@ -61,3 +68,4 @@ spec:
         requests:
           storage: {{.Values.elasticsearch.storage}}
       storageClassName: {{.Values.elasticsearch.storageClassName}}
+{{- end}}

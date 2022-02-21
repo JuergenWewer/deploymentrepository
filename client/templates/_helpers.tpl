@@ -29,9 +29,3 @@ Create chart name and version as used by the chart label.
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/*
-Create dockeryuuvisorg pull secret.
-*/}}
-{{- define "imagePullSecret" }}
-{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.imageCredentials.dockeryuuvisorg.registry (printf "%s:%s" .Values.imageCredentials.dockeryuuvisorg.username .Values.imageCredentials.dockeryuuvisorg.password | b64enc) | b64enc }}
-{{- end }}

@@ -54,6 +54,34 @@
           size: "{{ gogspersistencesize }}"
         git:
           password: "{{ gogsgitpassword }}"
+      gitea:
+        enabled: true
+        fullnameOverride: gitea
+        ingress:
+          enabled: true
+        gitea:
+          admin:
+            password: optimalsystem
+          config:
+            database:
+              DB_TYPE: sqlite3
+              ## https://gitea.com/gitea/helm-chart/issues/95#issuecomment-122875
+              ## Note that the intit script checks to see if the IP & port of the database service is accessible, so make sure you set those to something that resolves as successful (since sqlite uses files on disk setting the port & ip won't affect the running of gitea).
+              HOST: example.com
+              PORT: 80
+            service:
+              DISABLE_REGISTRATION: true
+          database:
+            builtIn:
+              postgresql:
+                enabled: false
+          cache:
+            builtIn:
+              enabled: false
+        persistence:
+          enabled: true
+          size: 1Gi
+          storageClassName: managed-nfs-raid-storage
       minio:
         accessKey: "{{ minioaccessKey }}"
         secretKey: "{{ miniosecretKey }}"

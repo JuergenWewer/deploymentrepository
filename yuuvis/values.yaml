@@ -13,8 +13,12 @@ yuuvis:
     address: 10.211.55.4:30111
   git:
     protocol: http
-    url: gogs.infrastructure/yuuvis/yuuvis-config.git
-    server: gogs.infrastructure
+    url: gitea-http.infrastructure:3000/yuuvis/yuuvis-config.git
+    server: gitea-http.infrastructure:3000
+    # please not that since infrastructure helm chart 0.9.0 gitea is used
+    # in previous versions gogs was used
+    # url: gogs.infrastructure/yuuvis/yuuvis-config.git
+    # server: gogs.infrastructure
     name: yuuvis-config
     user: yuuvis
     password: optimalsystem
@@ -122,20 +126,24 @@ yuuvis:
     ### userservice
       - endpoints: /userservice/**
     ### bpm-engine
+      - endpoints: /bpm-engine/swagger-ui.html,/bpm-engine/swagger-ui/**,/bpm-engine/v2/api-docs/**,/bpm-engine/v3/api-docs/**
+      - endpoints: /bpm-engine/api/**
       - endpoints: /bpm-engine/internal/**
-        access: denyAll
-      - endpoints: /bpm-engine/**
+        access: hasAuthority('YUUVIS_SYSTEM_INTEGRATOR')
 
   storage: |
     storage:
+      default-rendition-repository: renrepo
       repositories:
         s3:
           profiles: ['s3profile1']
           default: true
-        netapp:
-          profiles: ['netapplike']
-          url:  http://archive/api/profiles/{profile}/dms/objects
-          useDiscovery: true
+        archive_s3:
+          profiles: ['s3profile2']
+          default: false
+        renrepo:
+          profiles: ['s3renrepo']
+          default: false
       profiles:
         s3:
           s3profile1:
@@ -143,12 +151,19 @@ yuuvis:
             secret-key: optimalsystem
             url: 'http://minio.infrastructure:9000'
             bucket: 'dmscloudrepodocker'
-        netapp:
-          netapplike:
-            # use mountpoint of the persistent volume claim that provides the netapp storage
-            # must be the same in the deployment of the archive app
-            volume: '/var/lib/netapp/data'
-            defaultRetentionInDays: 10
+          s3profile2:
+            access-key: 'MGMWCOYTDUSLNCFE'
+            secret-key: 'changeme'
+            url: 'http://minio.infrastructure:9000'
+            bucket: 's3archive'
+            pathTemplate: '{tenant}-{objectTypeId}/{DATE(yyyy)}/{DATE(MM)}/{DATE(dd)}'
+          s3renrepo:
+            access-key: 'MGMWCOYTDUSLNCFE'
+            secret-key: 'changeme'
+            url: 'http://minio.infrastructure:9000'
+            bucket: 'rendition'
+            pathTemplate: '{contentStreamId.substring(0,2)}/{contentStreamId.substring(2,4)}/{contentStreamId.substring(4,6)}'
+
   oauth2: |
     # configuration for the yuuvis authentication service
     keycloak.host: {{.Values.yuuvis.keycloak.address}}
@@ -213,6 +228,7 @@ yuuvis:
           <role>
             <name>YUUVIS_DEFAULT</name>
             <permission>
+              <action>create</action>
               <action>read</action>
               <action>write</action>
               <action>delete</action>
@@ -221,6 +237,7 @@ yuuvis:
           <role>
             <name>YUUVIS_TENANT_ADMIN</name>
             <permission>
+              <action>create</action>
               <action>read</action>
               <action>write</action>
               <action>delete</action>
@@ -229,6 +246,7 @@ yuuvis:
           <role>
             <name>YUUVIS_SYSTEM_INTEGRATOR</name>
             <permission>
+              <action>create</action>
               <action>read</action>
               <action>write</action>
               <action>delete</action>
@@ -300,7 +318,7 @@ yuuvis:
   services:
     api:
       dockerRegistry: docker.yuuvis.org/yuuvis/api-gateway
-      tag: 4.8.0-RC09
+      tag: 4.9.6
       profiles: prod,redis,docker,kubernetes,metrics
       instances: 1
       java:
@@ -313,7 +331,7 @@ yuuvis:
         memory: "512Mi"
     admin:
       dockerRegistry: docker.yuuvis.org/yuuvis/admin
-      tag: 5.7.2.0
+      tag: 5.7.2.3
       profiles: prod,docker,kubernetes
       instances: 1
       port: 7273
@@ -323,7 +341,7 @@ yuuvis:
         memory: "128Mi"
     audit:
       dockerRegistry: docker.yuuvis.org/yuuvis/audit
-      tag: 4.8.0-RC09
+      tag: 4.9.6
       profiles: prod,jpapostgres,dbs,docker,kubernetes,metrics
       instances: 1
       port: 7251
@@ -337,7 +355,7 @@ yuuvis:
         use: true
         value: 30080
       dockerRegistry: docker.yuuvis.org/yuuvis/authentication
-      tag: 4.8.0-RC09
+      tag: 4.9.6
       profiles: prod,oauth2,docker,kubernetes,metrics
       instances: 1
       port: 8080
@@ -357,7 +375,7 @@ yuuvis:
           name: keycloak-tls-selfsigned
     config:
       dockerRegistry: docker.yuuvis.org/yuuvis/config
-      tag: 4.8.0-RC09
+      tag: 4.9.6
       instances: 1
       port: 7282
       java:
@@ -366,7 +384,7 @@ yuuvis:
         memory: "256Mi"
     contentanalyzer:
       dockerRegistry: docker.yuuvis.org/yuuvis/contentanalyzer
-      tag: 4.8.0-RC09
+      tag: 4.9.6
       profiles: prod,docker,kubernetes,metrics
       instances: 2
       port: 7430
@@ -377,7 +395,7 @@ yuuvis:
     index:
       dockerRegistry: docker.yuuvis.org/yuuvis/index
       profiles: prod,es,docker,kubernetes,redis,metrics
-      tag: 4.8.0-RC09
+      tag: 4.9.6
       instances: 1
       port: 7291
       dependencyCheck:
@@ -389,7 +407,7 @@ yuuvis:
         memory: "1024Mi"
     organization:
       dockerRegistry: docker.yuuvis.org/yuuvis/organization
-      tag: 4.8.0-RC09
+      tag: 4.9.6
       profiles: prod,oauth2,keycloak,docker,kubernetes,metrics
       instances: 1
       port: 7440
@@ -407,7 +425,7 @@ yuuvis:
           name: keycloak-tls-selfsigned
     registry:
       dockerRegistry: docker.yuuvis.org/yuuvis/registry
-      tag: 4.8.0-RC09
+      tag: 4.9.6
       profiles: prod,docker,jpapostgres,dbs,redis,kubernetes,metrics
       instances: 1
       port: 7510
@@ -417,7 +435,7 @@ yuuvis:
         memory: "1024Mi"
     repository:
       dockerRegistry: docker.yuuvis.org/yuuvis/repository
-      tag: 4.8.0-RC09
+      tag: 4.9.6
       profiles: prod,storage,docker,kubernetes,redis,metrics
       instances: 1
       port: 7500
@@ -430,7 +448,7 @@ yuuvis:
         memory: "1024Mi"
     search:
       dockerRegistry: docker.yuuvis.org/yuuvis/search
-      tag: 4.8.0-RC09
+      tag: 4.9.6
       profiles: prod,es,docker,kubernetes,metrics
       instances: 1
       port: 7221
@@ -444,9 +462,18 @@ yuuvis:
     system:
       dockerRegistry: docker.yuuvis.org/yuuvis/system
       profiles: prod,docker,redis,kubernetes,metrics
-      tag: 4.8.0-RC09
+      tag: 4.9.6
       instances: 1
       port: 7400
+      java:
+        maxHeap: -Xmx512m -XX:+ExitOnOutOfMemoryError
+      requests:
+        memory: "512Mi"
+    commander:
+      dockerRegistry: docker.yuuvis.org/yuuvis/commander
+      profiles: prod,docker,kubernetes,dbs,es
+      tag: 4.9.6
+      instances: 0
       java:
         maxHeap: -Xmx512m -XX:+ExitOnOutOfMemoryError
       requests:
@@ -461,26 +488,10 @@ yuuvis:
         maxHeap: -Xmx512m -XX:+ExitOnOutOfMemoryError
       requests:
         memory: "512Mi"
-      # if testMode: true a pvc will be created and mounted to the archiveservice container
-      testMode: true
-      storageClassName: standard
-      storage: 500Mi
       port: 7530
-      volumes: |
-        - name: archiveservice-netapp
-          persistentVolumeClaim:
-            claimName: archiveservice-netapp
-      volumeMounts: |
-        - mountPath: /var/lib/netapp/data
-          name: archiveservice-netapp
-      pvc:
-        name: archiveservice-netapp
-        storageclass: standard
-        storage: 500Mi
-        accessmode: ReadWriteMany
     controller:
       dockerRegistry: docker.yuuvis.org/yuuvis/controller
-      tag: 4.7.1
+      tag: 4.9.0
       profiles: prod,docker,es,oauth2,lc,mq,kubernetes
       instances: 1
       port: 7332
@@ -498,10 +509,13 @@ yuuvis:
           name: keycloak-tls-selfsigned
     textextractor:
       dockerRegistry: docker.yuuvis.org/yuuvis/textextractor
-      tag: 4.7.1
+      tag: 4.9.0
       profiles: prod,docker,es,lc,mq,kubernetes
       instances: 1
       port: 7420
+      dependencyCheck:
+        enable: true
+        url: http://elasticsearch.infrastructure.svc.cluster.local:9200
       java:
         maxHeap: -Xmx1024m -XX:+ExitOnOutOfMemoryError
       requests:

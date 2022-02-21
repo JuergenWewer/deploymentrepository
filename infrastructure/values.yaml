@@ -39,12 +39,19 @@ yuuvis:
         user:
           name: root
           password: optimalsystem
-    
+  git:
+    user: yuuvis
+    password: optimalsystem
+    initcontainer:
+      image: docker.yuuvis.org/yuuvis/helper/init-helper:latest
+      secret: dockeryuuvisorg
+
+
 elasticsearch:
-  image: docker.yuuvis.org/yuuvis/elasticsearch:2021-02-09
+  image: docker.yuuvis.org/yuuvis/elasticsearch:2022-01-11
   imagePullPolicy: IfNotPresent
   imagePullSecret: dockeryuuvisorg
-  storage: 5Gi
+  storage: 10Gi
   storageClassName: managed-nfs-raid-storage
   javaOpts: -Xms1024m -Xmx1024m
   replicas: 1
@@ -52,9 +59,23 @@ elasticsearch:
   targetPort: 9300
   port2: 9200
   targetPort2: 9200
-  # value for the elastic parameter uster.initial_master_nodes
-  # if more than 1 node should be used, adjust initial master nodes value
+  highAvailability:
+    enabled: false
+    # Combined memory of all elasticsearch nodes should not exceed 50% of capacity
+    data:
+      nodes: 2
+      storage: 200Gi
+      memory: -Xms4096m -Xmx4096m
+    master:
+      nodes: 3
+      storage: 50Gi
+      memory: -Xms1024m -Xmx1024m
+      initial_master_nodes: elasticsearch-master-0, elasticsearch-master-1, elasticsearch-master-2
+  # Default values if high availability is disabled. Nodes function as both data and master nodes simultaneously.
+  nodes: 1
   initial_master_nodes: elasticsearch-0
+  memory: -Xms1024m -Xmx1024m
+
 
 postgresql:
   enabled: true
@@ -92,20 +113,35 @@ rabbitmq:
     storageClass: managed-nfs-raid-storage
     size: 1Gi
 
-gogs:
-  useCustomDeployment: true
-  image: gogs/gogs:0.11.91
-  imagePullPolicy: IfNotPresent
-  initcontainer:
-    image: docker.yuuvis.org/yuuvis/helper/init-helper:latest
-    secret: dockeryuuvisorg
+gitea:
+  enabled: true
+  fullnameOverride: gitea
+  ingress:
+    enabled: true
+  gitea:
+    admin:
+      password: optimalsystem
+    config:
+      database:
+        DB_TYPE: sqlite3
+        ## https://gitea.com/gitea/helm-chart/issues/95#issuecomment-122875
+        ## Note that the intit script checks to see if the IP & port of the database service is accessible, so make sure you set those to something that resolves as successful (since sqlite uses files on disk setting the port & ip won't affect the running of gitea).
+        HOST: example.com
+        PORT: 80
+      service:
+        DISABLE_REGISTRATION: true
+    database:
+      builtIn:
+        postgresql:
+          enabled: false
+    cache:
+      builtIn:
+        enabled: false
   persistence:
-    size: 100Mi
-    storageClassName: managed-nfs-raid-storage
-  git:
-    user: yuuvis
-    password: optimalsystem
-    
+    enabled: true
+    size: 1Gi
+    storageClass: managed-nfs-raid-storage
+
 minio:
   enabled: true
   fullnameOverride: minio

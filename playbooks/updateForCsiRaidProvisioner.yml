@@ -1,4 +1,10 @@
 - hosts: localhost
+  vars:
+    helm_chart_url: "https://dl.gitea.io/charts/"
   tasks:
+    - name: Add helm repo
+      kubernetes.core.helm_repository:
+        name: gitea-charts
+        repo_url: "{{ helm_chart_url }}"
     - name: create infrastructure and waiting suppression ending
       import_tasks: ./updateTask.yml
