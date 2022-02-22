@@ -36,7 +36,7 @@ spec:
             - name: PROVISIONER_NAME
               value: jw-cloud.org/csi-raid
             - name: NFS_SERVER
-              value: 192.168.178.77
+              value: 10.0.1.51
             - name: NFS_PATH
               value: /mnt/optimal/nfs-csi-provisioner
             - name: CSIRAID_SOURCE
@@ -57,6 +57,6 @@ spec:
             name: csi-raid-configmap
         - name: ssh-keys-v
           secret:
-            secretName: csiraidsecret-key
+            secretName: ssh-keys
             defaultMode: 0600
 
