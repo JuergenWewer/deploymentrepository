@@ -11,7 +11,7 @@ data:
     key = z2h7JY7GfvDmdhhUrNNBRAhAa+/26Zq/k52EP3sGqKqzK/hp7cwz2YMtXA9bvTzZXt0CoCXdKW676uQ6qC0Kwg==
     [target]
     type = sftp
-    host = 192.168.178.77
+    host = 10.0.1.51
     path = /mnt/optimal/nfs-csi-provisioner-backup
     user = root
     key_file = /.ssh/id_rsa

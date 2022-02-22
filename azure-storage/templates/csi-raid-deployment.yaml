@@ -50,7 +50,7 @@ spec:
       volumes:
         - name: nfs-client-root
           nfs:
-            server: 192.168.178.77
+            server: 10.0.1.51
             path: /mnt/optimal/nfs-csi-provisioner
         - name: csi-raid-config
           configMap:
