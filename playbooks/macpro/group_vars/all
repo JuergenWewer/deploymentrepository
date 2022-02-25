@@ -7,6 +7,8 @@ pvsdir: ./playbooks/persistentvolumes/macpro
 hostIP: 192.168.178.77
 hostPort: 30080
 nfsserver: 192.168.178.77
+nfssecret: csiraidsecret-key
+nfsbackup: false
 nfsprovisionerpath: /mnt/optimal/nfs-csi-provisioner
 kubeconfig: /Users/wewer/.kube/master/etc/kubernetes/admin.conf
 dbpassword: optimalsystem

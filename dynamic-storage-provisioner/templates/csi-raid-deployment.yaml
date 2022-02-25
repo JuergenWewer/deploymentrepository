@@ -36,7 +36,7 @@ spec:
             - name: PROVISIONER_NAME
               value: jw-cloud.org/csi-raid
             - name: NFS_SERVER
-              value: 10.0.1.51
+              value: {{.Values.csiraid.nfs.server}}
             - name: NFS_PATH
               value: /mnt/optimal/nfs-csi-provisioner
             - name: CSIRAID_SOURCE
@@ -44,19 +44,19 @@ spec:
             - name: CSIRAID_TARGET
               value: target
             - name: CSIRAID_ACTIVE
-              value: "false"
+              value: "{{.Values.csiraid.nfs.backup}}"
       imagePullSecrets:
         - name: jw-repo-secret
       volumes:
         - name: nfs-client-root
           nfs:
-            server: 10.0.1.51
+            server: {{.Values.csiraid.nfs.server}}
             path: /mnt/optimal/nfs-csi-provisioner
         - name: csi-raid-config
           configMap:
             name: csi-raid-configmap
         - name: ssh-keys-v
           secret:
-            secretName: ssh-keys
+            secretName: {{.Values.csiraid.nfs.secret}}
             defaultMode: 0600
 

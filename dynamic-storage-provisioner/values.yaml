@@ -170,3 +170,8 @@ priorityClassName: system-cluster-critical
 ## by example :
 ## securityContext: { runAsUser: 1001 }
 securityContext: {}
+
+csiraid:
+  nfs:
+    server: 192.168.178.77
+    secret: csiraidsecret-key

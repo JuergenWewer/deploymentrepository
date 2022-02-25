@@ -50,3 +50,5 @@
       state: absent
       wait: true
     when: application
+  - name: delete dynamic storage provisioner
+    import_tasks: ./dynamicStorageProvisionerDelete.yml

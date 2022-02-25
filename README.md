@@ -232,6 +232,13 @@ community.kubernetes.helm_repository
 1. install yuuvis
 ####################################################
 
+cd infrastructure
+
+In der Chart.yaml Datei werden die abhängigen Pakete spezifiziert, mit Version
+
+dann:
+helm dep up
+
 cd playbooks
 
 ################## install with predefinied persistent volumes ############################
@@ -249,6 +256,8 @@ ansible-playbook -i macpro update.yml -v
 # if dynamic storage provisioning (nfs or blob) should be used
 helm install azure-storage azure-storage --set node.enableBlobfuseProxy=false --namespace kube-system
 ansible-playbook -i macpro updateForCsiRaidProvisioner.yml -v
+optimal:
+ansible-playbook -i optimal updateForCsiRaidProvisioner.yml -v
 
 uninstall:
 ansible-playbook -i macpro deleteyuuvis.yml -v

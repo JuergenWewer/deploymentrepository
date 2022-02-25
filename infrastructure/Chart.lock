@@ -18,4 +18,4 @@ dependencies:
   repository: https://dl.gitea.io/charts/
   version: 4.1.1
 digest: sha256:851bc0ca69952fe9586c12d5ee6a942b0122e868a05c0516f9c37491a1fa1478
-generated: "2022-02-18T12:40:05.594386+01:00"
+generated: "2022-02-25T09:26:57.223323+01:00"

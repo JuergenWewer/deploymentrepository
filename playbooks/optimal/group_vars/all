@@ -8,6 +8,8 @@ pvsdir: /home/jwewer/workspace/yuuvis/playbooks/persistentvolumes/optimal
 hostIP: 10.0.1.51
 hostPort: 30080
 nfsserver: 10.0.1.51
+nfssecret: ssh-key
+nfsbackup: false
 nfsprovisionerpath: /mnt/optimal/nfs-provisioner
 kubeconfig: /etc/kubernetes/admin.conf
 dbpassword: optimalsystem
