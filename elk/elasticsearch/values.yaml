@@ -1,4 +1,0 @@
-esConfig:
-  elasticsearch.yml: |
-    xpack.security.enabled: true
-    volumeClaimTemplate.storageClassName: managed-nfs-raid-storage
