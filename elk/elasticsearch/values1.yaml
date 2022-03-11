@@ -1,0 +1,6 @@
+volumeClaimTemplate:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: "managed-nfs-raid-storage"
+  resources:
+    requests:
+      storage: 100M

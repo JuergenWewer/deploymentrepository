@@ -254,13 +254,17 @@ ansible-playbook -i macpro start.yml -v
 ansible-playbook -i macpro update.yml -v
 
 # if dynamic storage provisioning (nfs or blob) should be used
+#thats no longer necesary:
 helm install azure-storage azure-storage --set node.enableBlobfuseProxy=false --namespace kube-system
+#instead just call:
 ansible-playbook -i macpro updateForCsiRaidProvisioner.yml -v
 optimal:
 ansible-playbook -i optimal updateForCsiRaidProvisioner.yml -v
 
-uninstall:
+uninstall yuuvis and dynamic storage provisioner:
 ansible-playbook -i macpro deleteyuuvis.yml -v
+
+uninstall just the dynamic storage provisioner
 helm uninstall azure-storage --namespace kube-system
 
 for blob storage class:

@@ -2,5 +2,5 @@
   tasks:
     - name: Install dynamic storage provisioner
       import_tasks: ./dynamicStorageProvisioner.yml
-    - name: create infrastructure and waiting suppression ending
+    - name: Install infrastructure and waiting suppression ending
       import_tasks: ./updateTask.yml

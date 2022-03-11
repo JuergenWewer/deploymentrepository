@@ -1,0 +1,11 @@
+- hosts: localhost
+  tasks:
+    - name: Install elasticsearch
+      kubernetes.core.helm:
+        name: elasticsearch
+        namespace: kube-system
+        chart_ref: elastic/elasticsearch
+        kubeconfig_path: "{{ kubeconfig }}"
+        create_namespace: True
+        wait: true
+        values_files: $HOME/workspace/yuuvis/elk/elasticsearch/values1.yaml
