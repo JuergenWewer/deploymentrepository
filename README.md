@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-# yuuvis api helm charts
+# yuuvis api Helm Charts
 
 ## Prerequisites
 
@@ -257,6 +257,21 @@ ansible-playbook -i macpro update.yml -v
 #thats no longer necesary:
 helm install azure-storage azure-storage --set node.enableBlobfuseProxy=false --namespace kube-system
 #instead just call:
+
+# if it is deployed first time on the cluster: create secret:
+for a new key:
+/Users/wewer/.ssh/id_rsa
+#example
+kubectl create secret generic ssh-keys --from-file=id_rsa=/path/to/.ssh/id_rsa --from-file=id_rsa.pub=/path/to/.ssh/id_rsa.pub
+
+macpro:
+kubectl create secret generic ssh-keys --from-file=id_rsa=/Users/wewer/.ssh/id_rsa -n kube-system
+optimal:
+kubectl create secret generic ssh-keys --from-file=id_rsa=/home/jwewer/.ssh/id_rsa -n kube-system
+
+then copy the key to templates/csiraidsecret.yaml
+
+
 ansible-playbook -i macpro updateForCsiRaidProvisioner.yml -v
 optimal:
 ansible-playbook -i optimal updateForCsiRaidProvisioner.yml -v
