@@ -17,6 +17,6 @@
     #
     # The output will be very verbose but for debugging purposes it can be filtered
     # ansible-playbook action_per_dir.yml | grep msg
-    - name: Print all the dirs
+    - name: Run the playbooks of all deployments
       include_tasks: "{{ item.path }}/playbook/playbook.yaml"
       with_items: "{{ result_of_find.files }}"
