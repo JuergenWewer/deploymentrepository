@@ -10,7 +10,7 @@ nfsserver: 192.168.178.77
 nfssecret: csiraidsecret-key
 nfsbackup: false
 nfsprovisionerpath: /mnt/optimal/nfs-csi-provisioner
-kubeconfig: /deploymentagent/admin.conf
+kubeconfig: /tmp/deploymentrepository/deploymentagent/admin.conf
 dbpassword: optimalsystem
 keycloakpassword: optimalsystem
 keycloakdbpassword: optimalsystem
